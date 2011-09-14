@@ -1,0 +1,43 @@
+* About
+Challoc is a memory allocator useful when dealing with lots of objects
+that are all of the same size. It should be easy to use in your programs
+and build. It depends only on the standard library's malloc() and
+free().
+So far it has only been tested on an x86 architecture, but I don't (mostly due
+to a lack of experience with such things) see a problem with using it on
+another platform.
+
+* License & Copyright
+(C) Copyright 2011, Dario Hamidi <dario.hamidi@gmail.com>
+
+This program is released under the GPL version 3, that you should have
+received together with this program (see [[./LICENSE][LICENSE]]).
+
+* Usage
+For up-to-date information about the usage of challoc, have a look at
+the initial comments in [[file:./challoc.h][challoc.h]].
+
+* Installation
+This program comes with a Makefile. You can install it by issuing the
+command
+#+begin_example
+ $ make install
+#+end_example
+in the program's directory. Super user privileges are required when
+using the default target directory for installation.
+
+By default the shared object file will be installed into /usr/local/lib/
+and the include file into /usr/local/include/challoc/challoc.h.
+
+You can change these paths by changing the value of the PREFIX variable
+when invoking make:
+#+begin_example
+ $ make install PREFIX=/usr # will install into /usr/lib/ and /usr/include/challoc/
+#+end_example
+
+Uninstallation is easy as well. The Makefile provides an `uninstall'
+target:
+#+begin_example
+ $ make uninstall
+#+end_example
+This removes all previously installed files.
