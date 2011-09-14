@@ -55,7 +55,7 @@ ChunkAllocator* get_first_allocator_with_free_chunk(ChunkAllocator* root) {
      /* all allocators have no memory left, create a new one */
      if (cur == NULL) {
           /* next allocator gets double number of chunks */
-          prev->next = init_alloc(prev->n_chunks * 2, prev->chunk_size);
+          prev->next = chcreate(prev->n_chunks * 2, prev->chunk_size);
           return prev->next;
      }
      else
@@ -123,7 +123,6 @@ ChunkAllocator* chcreate(size_t n_chunks, size_t chunk_size) {
      return s;
 
 FAIL:
-     fprintf(stderr,"init_alloc(): Out of memory\n");
      return NULL;
 }
 

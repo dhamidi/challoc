@@ -20,6 +20,8 @@
 #ifndef CHALLOC_H
 #define CHALLOC_H
 
+#include <stddef.h>
+
 /*
  * challoc - chunk allocator
  * Creates an object that allocates a large buffer for allocations
