@@ -26,13 +26,13 @@ command
 in the program's directory. Super user privileges are required when
 using the default target directory for installation.
 
-By default the shared object file will be installed into /usr/local/lib/
-and the include file into /usr/local/include/challoc/challoc.h.
+By default the shared object file will be installed into =/usr/local/lib/=
+and the include file into =/usr/local/include/challoc/challoc.h=.
 
 You can change these paths by changing the value of the PREFIX variable
 when invoking make:
 #+begin_example
- $ make install PREFIX=/usr # will install into /usr/lib/ and /usr/include/challoc/
+ $ make install PREFIX=/usr # will install into =/usr/lib/= and =/usr/include/challoc/=
 #+end_example
 
 Uninstallation is easy as well. The Makefile provides an `uninstall'
