@@ -8,7 +8,7 @@ INCFILES=challoc.h
 install: libchalloc.so
 	mkdir -p $(PREFIX)/include/challoc
 	cp -vf $(INCFILES) $(PREFIX)/include/challoc/
-	cp -vf $(LIBFILES) $(PREFIX)/bin/
+	cp -vf $(LIBFILES) $(PREFIX)/lib/
 
 .PHONY: uninstall
 uninstall:
