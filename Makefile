@@ -4,6 +4,11 @@ CFLAGS=-O2
 LIBFILES=libchalloc.so
 INCFILES=challoc.h
 
+test: CFLAGS=-DCHALLOC_TEST -g -pedantic -std=c89 -Wall -Wextra -Wno-unused
+test: challoc.c challoc.h
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+	@./test; if [[ "$$?" -eq "0" ]]; then echo "Tests passed."; else echo "Tests failed"; fi
+
 .PHONY: install
 install: libchalloc.so
 	mkdir -p $(PREFIX)/include/challoc
