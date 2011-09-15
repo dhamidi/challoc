@@ -12,6 +12,7 @@ test: challoc.c challoc.h
 .PHONY: install
 install: libchalloc.so
 	mkdir -p $(PREFIX)/include/challoc
+	mkdir -p $(PREFIX)/lib
 	cp -vf $(INCFILES) $(PREFIX)/include/challoc/
 	cp -vf $(LIBFILES) $(PREFIX)/lib/
 
