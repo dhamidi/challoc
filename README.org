@@ -47,6 +47,10 @@ This removes all previously installed files.
 An integer overflow is possible in =chcreate=. This will be fixed some
 day.
 
+* Todo
+
+Write more and better tests.
+
 * Thanks
 
 Thanks to gianluca <gianluca@sottospazio.it> for pointing out some
