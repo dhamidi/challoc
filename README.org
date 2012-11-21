@@ -50,4 +50,4 @@ day.
 * Thanks
 
 Thanks to gianluca <gianluca@sottospazio.it> for pointing out some
-faulty pointer calculations.
+faulty pointer calculations and two off-by-one errors.
