@@ -34,7 +34,7 @@ void push_chunk_to_first_free_stack(ChunkAllocator* root,void* p) {
      ChunkAllocator* cur = root;
 
      /* find an allocator where some memory is used */
-     while (cur && cur->current_chunk == cur->n_chunks)
+     while (cur && cur->current_chunk == cur->n_chunks-1)
           cur = cur->next;
 
      cur->chunks[++cur->current_chunk] = p;
@@ -84,7 +84,7 @@ void chfree(ChunkAllocator* root,void* p) {
           return;
 
      /* all memory in this allocator is free already */
-     if (root->current_chunk == root->n_chunks)
+     if (root->current_chunk == root->n_chunks-1)
           push_chunk_to_first_free_stack(root,p);
      else
           root->chunks[++root->current_chunk] = p;
