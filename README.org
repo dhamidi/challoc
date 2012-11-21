@@ -8,7 +8,7 @@ to a lack of experience with such things) see a problem with using it on
 another platform.
 
 * License & Copyright
-(C) Copyright 2011, Dario Hamidi <dario.hamidi@gmail.com>
+(C) Copyright 2011, 2012 Dario Hamidi <dario.hamidi@gmail.com>
 
 This program is released under the GPL version 3, that you should have
 received together with this program (see [[./LICENSE][LICENSE]]).

@@ -2,7 +2,7 @@
  *   Memory allocator for efficiently handling lots of objects
  *   of the same size.
  *
- * (C) Copyright 2011, Dario Hamidi <dario.hamidi@gmail.com>
+ * (C) Copyright 2011, 2012, Dario Hamidi <dario.hamidi@gmail.com>
  * 
  * Challoc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
