@@ -53,5 +53,5 @@ Write more and better tests.
 
 * Thanks
 
-Thanks to gianluca <gianluca@sottospazio.it> for pointing out some
-faulty pointer calculations and two off-by-one errors.
+Thanks to gianluca for pointing out some faulty pointer calculations and
+two off-by-one errors.
