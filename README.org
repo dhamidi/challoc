@@ -41,3 +41,7 @@ target:
  $ make uninstall
 #+end_example
 This removes all previously installed files.
+
+* Bugs
+
+An integer overflow is possible in =chcreate=. This will be fixed some day.
