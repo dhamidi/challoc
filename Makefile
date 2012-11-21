@@ -27,3 +27,7 @@ libchalloc.so: challoc.o
 
 challoc.o: challoc.c challoc.h
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $< $(LDFLAGS)
+
+check-syntax:
+	$(CC) -pedantic -std=c89 -Wall -Wextra -Wno-unused -fsyntax-only $(CHK_SOURCES)
+
