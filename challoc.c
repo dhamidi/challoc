@@ -119,8 +119,8 @@ ChunkAllocator* chcreate(size_t n_chunks, size_t chunk_size) {
      if (!s)
           goto FAIL;
 
-     s->chunks = (unsigned char*)s + offsetof(ChunkAllocator,chunks);
-     s->memory = (unsigned char*)s + offsetof(ChunkAllocator,memory);
+     s->chunks = (unsigned char**)((unsigned char*)s + sizeof(*s));
+     s->memory = (unsigned char*)s + sizeof(*s) + n_chunks * sizeof(void*);
      
      s->n_chunks = n_chunks;
      s->chunk_size = chunk_size;
