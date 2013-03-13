@@ -20,7 +20,7 @@ install: libchalloc.so
 uninstall:
 	rm -vf $(foreach file,$(INCFILES),$(PREFIX)/include/challoc/$(file))
 	rmdir -v $(PREFIX)/include/challoc
-	rm -vf $(foreach file,$(LIBFILES),$(PREFIX)/bin/$(file))
+	rm -vf $(foreach file,$(LIBFILES),$(PREFIX)/lib/$(file))
 
 libchalloc.so: challoc.o
 	$(CC) $(CFLAGS) -shared -Wl,-soname,libchalloc.so -o $@ $< $(LDFLAGS)
