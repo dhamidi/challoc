@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2011, 2012, Dario Hamidi <dario.hamidi@gmail.com>
+ * (C) Copyright 2011, 2012, 2013, Dario Hamidi <dario.hamidi@gmail.com>
  *
  * This file is part of Challoc.
  * 

@@ -1,14 +1,15 @@
 * About
 Challoc is a memory allocator useful when dealing with lots of objects
 that are all of the same size. It should be easy to use in your programs
-and build. It depends only on the standard library's malloc() and
-free().
-So far it has only been tested on an x86 architecture, but I don't (mostly due
-to a lack of experience with such things) see a problem with using it on
-another platform.
+and build. It depends only on the standard library's malloc(), calloc()
+and free().
+
+So far it has only been tested on an x86 architecture, but I don't
+(mostly due to a lack of experience with such things) see a problem with
+using it on another platform.
 
 * License & Copyright
-(C) Copyright 2011, 2012 Dario Hamidi <dario.hamidi@gmail.com>
+(C) Copyright 2011, 2012, 2013 Dario Hamidi <dario.hamidi@gmail.com>
 
 This program is released under the GPL version 3, that you should have
 received together with this program (see [[./LICENSE][LICENSE]]).
@@ -45,7 +46,8 @@ This removes all previously installed files.
 * Bugs
 
 An integer overflow is possible in =chcreate=. This will be fixed some
-day.
+day.  [2013-03-13] This bug has been eliminated by making more than one
+call to [mc]alloc.
 
 * Todo
 

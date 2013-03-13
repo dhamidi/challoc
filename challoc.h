@@ -2,7 +2,7 @@
  *   Memory allocator for efficiently handling lots of objects
  *   of the same size.
  *
- * (C) Copyright 2011, 2012, Dario Hamidi <dario.hamidi@gmail.com>
+ * (C) Copyright 2011, 2012, 2013, Dario Hamidi <dario.hamidi@gmail.com>
  * 
  * Challoc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,13 +37,12 @@
  * requested than the buffer can hold at the moment, another buffer is
  * allocated and linked to the first one. This list of buffers has to be
  * searched every time a new object is allocated or deallocated from that
- * buffer. Every time a new buffer is created, the amount of objects it
- * can hold is doubled, to minimize the length of the buffer list.
+ * buffer. 
  *
  * How to use it:
  * First create a chunk allocator by calling chcreate(). The number
  * of chunks (i.e. objects) should be a rough estimate of how many objects
- * you need - in case of doubt, use a larger number.
+ * you need -- in case of doubt, use a larger number.
  * After having created a ChunkAllocator object this way, allocate your
  * objects with challoc() and deallocate them with chfree().
  * If you want to discard all objects from a ChunkAllocator use chclear().
