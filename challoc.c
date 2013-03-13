@@ -174,7 +174,7 @@ int main(int argc, char** argv) {
      ChunkAllocator* nodes = chcreate(NODE_COUNT,sizeof(struct point_list));
 
      assert(nodes                                             );
-     assert(nodes->current_chunk == NODE_COUNT - 1            );
+     assert(nodes->current_chunk == NODE_COUNT                );
      assert(nodes->n_chunks      == NODE_COUNT                );
      assert(nodes->chunk_size    == sizeof(struct point_list) );
      assert(nodes->next          == NULL                      );
@@ -206,15 +206,16 @@ int main(int argc, char** argv) {
      }
 
      /*
-      * by now `nodes' should have created another buffer
-      * of double size.
+      * by now `nodes' should have a `next' ChunkAllocator
       */
 
      assert(nodes->next                                      );
-     assert(nodes->next->current_chunk == 2 * NODE_COUNT - 3 );
-     assert(nodes->next->n_chunks      == 2 * NODE_COUNT     );
+     assert(nodes->next->current_chunk == NODE_COUNT - 1     );
+     assert(nodes->next->n_chunks      == NODE_COUNT         );
      assert(nodes->next->chunk_size    == nodes->chunk_size  );
      assert(nodes->next->next          == NULL               );
+
+     assert(nodes->current_chunk == 0);
 
      chdestroy(&nodes);
 
