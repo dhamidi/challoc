@@ -18,6 +18,7 @@
  */ 
 #include "challoc.h"
 #include <stdlib.h>
+#include <assert.h>
 
 struct chunk_allocator {
      size_t n_chunks;            /* number of chunks this allocator holds */
@@ -28,45 +29,43 @@ struct chunk_allocator {
      unsigned char* memory;      /* challoc returns memory from here      */
 };
 
-
 static
-void push_chunk_to_first_free_stack(ChunkAllocator* root,void* p) {
-     ChunkAllocator* cur = root;
+ChunkAllocator* get_first_allocator_with_free_chunk(ChunkAllocator* start) {
+   ChunkAllocator* iter = NULL;
 
-     /* find an allocator where some memory is used */
-     while (cur && cur->current_chunk == cur->n_chunks-1)
-          cur = cur->next;
+   for (iter = start; iter; iter = iter->next) {
+      if (iter->current_chunk > 0) {
+         return iter;
+      }
 
-     cur->chunks[++cur->current_chunk] = p;
+      /* all allocators are full, so we append a new one and return
+       * it */
+      if (iter->next == NULL) {
+         iter->next = chcreate(iter->n_chunks,iter->chunk_size);
+         return iter->next;
+      }
+
+   }
+
+   /* never reached */
+   assert(0);
+   return NULL;
 }
 
 static
-ChunkAllocator* get_first_allocator_with_free_chunk(ChunkAllocator* root) {
-     ChunkAllocator* cur = root;
-     ChunkAllocator* prev = NULL;
+void push_chunk_to_first_free_stack(ChunkAllocator* root, void* p) {
+   ChunkAllocator* iter = NULL;
 
-     /*
-      * because size_t is unsigned, there is no way of telling whether
-      * the memory at cur->memory[0] has been given away already or not
-      * (in that case we would have to check for `cur->current_chunk == -1',
-      *  which is impossible).
-      */
-     
-     /* find first allocator with free memory */
-     while (cur && cur->current_chunk == 0) {
-          prev = cur;
-          cur = cur->next;
-     }
+   for (iter = root; iter; iter = iter->next) {
+      if (iter->current_chunk < iter->n_chunks) {
+         iter->chunks[iter->current_chunk++] = p;
+         return;
+      }
+   }
 
-     /* all allocators have no memory left, create a new one */
-     if (cur == NULL) {
-          /* next allocator gets double number of chunks */
-          prev->next = chcreate(prev->n_chunks * 2, prev->chunk_size);
-          return prev->next;
-     }
-     else
-          return cur;
-     
+   /* if we get here, there was no room for storing p in any allocator
+    * reachable from root */
+   assert(0);
 }
 
 void* challoc(ChunkAllocator* root) {
@@ -75,7 +74,7 @@ void* challoc(ChunkAllocator* root) {
 
      root = get_first_allocator_with_free_chunk(root);
      
-     return root->chunks[root->current_chunk--];
+     return root->chunks[--root->current_chunk];
 }
 
 
@@ -84,23 +83,20 @@ void chfree(ChunkAllocator* root,void* p) {
           return;
 
      /* all memory in this allocator is free already */
-     if (root->current_chunk == root->n_chunks-1)
+     if (root->current_chunk == 0)
           push_chunk_to_first_free_stack(root,p);
      else
-          root->chunks[++root->current_chunk] = p;
+          root->chunks[root->current_chunk++] = p;
 }
 
 void chclear(ChunkAllocator* root) {
-     ChunkAllocator* cur;
+     ChunkAllocator* iter = NULL;
 
      if (!root)
           return;
 
-     cur = root;
-     
-     while (cur) {
-          cur->current_chunk = cur->n_chunks-1;
-          cur = cur->next;
+     for (iter = root; iter; iter = iter->next) {
+        iter->current_chunk = iter->n_chunks;
      }
 }
 
@@ -108,49 +104,51 @@ ChunkAllocator* chcreate(size_t n_chunks, size_t chunk_size) {
      ChunkAllocator* s = NULL;
      size_t i;
 
-     /* calculate total required memory */
-     size_t required_memory
-          = n_chunks * chunk_size             /* space for s->memory */
-          + n_chunks * sizeof(void*)          /* space for s->chunks */
-          + sizeof(struct chunk_allocator);   /* space for s         */
-
-     s = (ChunkAllocator*)malloc(required_memory);
+     s = malloc(sizeof(*s));
 
      if (!s)
           goto FAIL;
 
-     s->chunks = (unsigned char**)((unsigned char*)s + sizeof(*s));
-     s->memory = (unsigned char*)s + sizeof(*s) + n_chunks * sizeof(void*);
+     s->chunks = calloc(n_chunks,sizeof(*s->chunks));
+     if (!s->chunks) goto CLEAR1;
+
+     s->memory = calloc(n_chunks,chunk_size);
+     if (!s->memory) goto CLEAR2;
      
      s->n_chunks = n_chunks;
      s->chunk_size = chunk_size;
-     s->current_chunk = n_chunks - 1;
+     s->current_chunk = 0;
      s->next = NULL;
      
      /* add locations in s->memory to the stack of free chunks */
-     for (i = 0; i < n_chunks; i++) {
-          s->chunks[i] = &s->memory[i * chunk_size];
+     while (s->current_chunk < s->n_chunks) {
+          s->chunks[s->current_chunk] = &s->memory[s->current_chunk * chunk_size];
+          s->current_chunk++;
      }
 
      return s;
 
-FAIL:
+  CLEAR1:
+     free(s);
+  CLEAR2:
+     free(s->chunks);
+  FAIL:
      return NULL;
 }
 
 void chdestroy(ChunkAllocator** root) {
-     ChunkAllocator *cur, *next;
-     cur = *root;
-     
-     while (cur) {
-          next = cur->next;
+   ChunkAllocator* cur = NULL;
+   ChunkAllocator* next = NULL;
 
-          free(cur);
+   for (cur = *root; cur; cur = next) {
+      next = cur->next;
 
-          cur = next;
-     }
+      free(cur->memory);
+      free(cur->chunks);
+      free(cur);
+   }
 
-     *root = NULL;
+   *root = NULL;
 }
 
 /**
