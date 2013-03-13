@@ -1,12 +1,12 @@
 PREFIX=/usr/local
 CC=gcc
-CFLAGS=-O2
+CFLAGS=-O2 -DNDEBUG
 LIBFILES=libchalloc.so
 INCFILES=challoc.h
+DEVELFLAGS=-DCHALLOC_TEST -g -pedantic -std=c89 -Wall -Wextra -Wno-unused
 
-test: CFLAGS=-DCHALLOC_TEST -g -pedantic -std=c89 -Wall -Wextra -Wno-unused
 test: challoc.c challoc.h
-	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+	$(CC) $(DEVELFLAGS) -o $@ $< $(LDFLAGS)
 	@./test; if [[ "$$?" -eq "0" ]]; then echo "Tests passed."; else echo "Tests failed"; fi
 
 .PHONY: install
@@ -29,5 +29,5 @@ challoc.o: challoc.c challoc.h
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $< $(LDFLAGS)
 
 check-syntax:
-	$(CC) -pedantic -std=c89 -Wall -Wextra -Wno-unused -fsyntax-only $(CHK_SOURCES)
+	$(CC) $(DEVELFLAGS) -fsyntax-only $(CHK_SOURCES)
 
